@@ -34,6 +34,21 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
+const allowedOrigins = ["https://friends-4po8.onrender.com"];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
 }
@@ -58,11 +73,9 @@ app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+  res.sendFile(path.join(__dirname, "../build/index.html"));
 });
-app.get("*", (req, res) => {
-  res.send("HEY");
-});
+
 // Mongoose Setup
 const PORT = process.env.PORT || 6001;
 mongoose.set("strictQuery", true);
