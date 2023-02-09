@@ -60,6 +60,9 @@ app.use("/posts", postRoutes);
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
+app.get("*", (req, res) => {
+  res.send("HEY");
+});
 // Mongoose Setup
 const PORT = process.env.PORT || 6001;
 mongoose.set("strictQuery", true);
