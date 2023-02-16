@@ -21,7 +21,7 @@ export const createPost = async (req, res) => {
 
     await newPost.save();
 
-    const posts = await Post.find();
+    const posts = await Post.find().sort({ createdAt: "desc" });
     res.status(200).json(posts);
   } catch (error) {
     res
@@ -33,7 +33,7 @@ export const createPost = async (req, res) => {
 // Read
 export const getFeedPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().sort({ createdAt: "desc" });
     res.status(200).json(posts);
   } catch (error) {
     res.status(404).json(error.message);
